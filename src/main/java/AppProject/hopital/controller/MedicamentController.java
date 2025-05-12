@@ -42,7 +42,7 @@ public class MedicamentController implements MedicamentsApi {
     }
 
     @Override
-//    @PreAuthorize("hasRole('PHARMACIEN')")
+    @PreAuthorize("hasRole('PHARMACIEN')")
     public void deleteMedicament(Long id) {
         medicamentsService.deleteMedicament(id);
     }

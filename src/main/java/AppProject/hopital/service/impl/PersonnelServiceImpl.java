@@ -60,15 +60,26 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
     @Override
     public PersonnelDto UpdatePersonnel(PersonnelDto dto){
-        if(dto.getId() != null){
-            personnelMapper.entityToDto(personnelRepository.save(personnelMapper.dtoToEntity(dto)));
-            return dto;
-
-        }
-        else {
+        if(dto.getId() == null){
             throw new EntityNotFoundException("Cet Utilisateur n'existe pas");
         }
 
+        Optional<Personnel> personnel = personnelRepository.findById(dto.getId());
+
+        if (personnel.isEmpty()) {
+            throw new EntityNotFoundException("Cet Utilisateur n'existe pas");
+        }
+
+
+        Personnel personnelToSave = personnel.get();
+        personnelToSave.setPersonnelname(dto.getPersonnelname());
+        personnelToSave.setEmail(dto.getEmail());
+        personnelToSave.setTelephone(dto.getTelephone());
+        personnelToSave.setRole(dto.getRole());
+        personnelToSave.setStatut(dto.getStatut());
+        PersonnelDto savedPersonel = personnelMapper.entityToDto(personnelRepository.save(personnelToSave));
+
+        return savedPersonel;
     }
     @Override
      public void changeStatutPersonnel(Long id){
