@@ -23,9 +23,6 @@ public class Personnel {
     private String email;
     @Column(name = "statut")
     private Boolean statut;
-    @ManyToOne
-    @JoinColumn(name = "facture_id")
-    private Facture facture;
      @Enumerated(EnumType.STRING)
      @Column(name = "role")
     private TypeRole role;

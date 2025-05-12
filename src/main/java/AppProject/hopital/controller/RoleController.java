@@ -4,10 +4,12 @@ import AppProject.hopital.controller.api.RoleApi;
 import AppProject.hopital.dto.RoleDto;
 import AppProject.hopital.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class RoleController implements RoleApi {
 
     private final RoleService roleService;

@@ -9,7 +9,6 @@ import AppProject.hopital.service.DossierMedicalService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,7 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
     public DossierMedicalDto saveDossier(DossierMedicalDto dto) {
         DossierMedical dossierMedical =dossierMedicalMapper.dtoToEntity(dto);
         dossierMedical.setPatient(patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() ->new RuntimeException("Patient not found")));
+                .orElseThrow(() ->new RuntimeException("Patient introuvable")));
         return dossierMedicalMapper.entityToDto(dossierMedicalRepository.save(dossierMedical));
     }
 
@@ -36,11 +35,11 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
              dossierMedicalMapper.entityToDto(dossierMedicalRepository.save(dossierMedicalMapper.dtoToEntity(dto)));
              return dto;
             }else {
-                throw new EntityNotFoundException("Patient not Found");
+                throw new EntityNotFoundException("Patient introuvable");
             }
         }
         else {
-            throw new EntityNotFoundException("Dossier not found");
+            throw new EntityNotFoundException("Dossier introuvable");
         }
     }
 
@@ -48,7 +47,7 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
     public DossierMedicalDto getDossierById(Long id) {
         return dossierMedicalRepository.findById(id)
                 .map(dossierMedicalMapper::entityToDto)
-                .orElseThrow(() -> new RuntimeException("Dossier not found"));
+                .orElseThrow(() -> new RuntimeException("Dossier introuvable"));
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class AuthController implements AuthApi {
 
     private final PersonnelRepository personnelRepository;
@@ -31,7 +33,7 @@ public class AuthController implements AuthApi {
     private final AuthenticationManager authenticationManager;
 
     public ResponseEntity<?> register(Personnel personnel) {
-        if (personnelRepository.findByPersonnelname(personnel.getPersonnelname()) !=null){
+        if (personnelRepository.findByPersonnelname(personnel.getPersonnelname()).isPresent()){
             return ResponseEntity.badRequest().body("personnelname is already in use");
         }
         personnel.setPasseword(passwordEncoder.encode(personnel.getPasseword()));

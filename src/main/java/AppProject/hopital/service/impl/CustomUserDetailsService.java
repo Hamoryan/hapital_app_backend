@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String personnelname) throws UsernameNotFoundException {
-        Personnel personnel = personnelRepository.findByPersonnelname(personnelname);
+        Optional<Personnel> personnel = personnelRepository.findByPersonnelname(personnelname);
 
-        if (personnel == null){
+        if (personnel.isEmpty()){
             throw new UsernameNotFoundException("personnel not found with personnelname" + personnelname);
         }
-        return new org.springframework.security.core.userdetails.User(personnel.getPersonnelname(), personnel.getPasseword(),
-                Collections.singletonList(new SimpleGrantedAuthority(personnel.getRole().toString())));
+        return new org.springframework.security.core.userdetails.User(personnel.get().getPersonnelname(), personnel.get().getPasseword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" +personnel.get().getRole().toString())));
     }
 }

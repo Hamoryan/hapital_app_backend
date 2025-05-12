@@ -42,14 +42,14 @@ public class PatientServiceImpl implements PatientService {
             return dto;
         }
         else {
-            throw new EntityNotFoundException("Patient not found");
+            throw new EntityNotFoundException("Patient introuvable");
         }
     }
 
     @Override
     public void changeStatutPatient(Long id) {
         Patient patient = patientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Patient doesn't exist")
+                () -> new EntityNotFoundException("Ce Patient n'existe pas")
         );
         if (patient.getStatut().equals(true)){
             patient.setStatut(false);
@@ -70,7 +70,7 @@ public class PatientServiceImpl implements PatientService {
             return patientDto;
         }
         else {
-            throw new EntityNotFoundException("Patient not found");
+            throw new EntityNotFoundException("Patient introuvable");
         }
     }
 

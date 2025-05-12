@@ -23,7 +23,7 @@ public class MedicamentPatientServiceImpl implements MedicamentPatientService {
     @Override
     public MedicamentPatientDto save(MedicamentPatientDto dto) {
         personnelRepository.findById(dto.getIdPersonnel()).orElseThrow(()
-                -> new RuntimeException("personnel not found"));
+                -> new RuntimeException("personnel introuvable"));
         MedicamentPatient entity = medicamentPatientMapper.dtoToEntity(dto);
         return medicamentPatientMapper.entityToDto(medicamentPatientRepository.save(entity));
     }
@@ -35,7 +35,7 @@ public class MedicamentPatientServiceImpl implements MedicamentPatientService {
             return dto;
         }
         else {
-            throw new EntityNotFoundException("MedicamentPatient not found");
+            throw new EntityNotFoundException("MedicamentPatient introuvable");
         }
     }
 
@@ -49,7 +49,7 @@ public class MedicamentPatientServiceImpl implements MedicamentPatientService {
     public MedicamentPatientDto getById(Long id) {
         return medicamentPatientRepository.findById(id)
                 .map(medicamentPatientMapper:: entityToDto)
-                .orElseThrow(() -> new RuntimeException("MedicamenPatient not found"));
+                .orElseThrow(() -> new RuntimeException("MedicamenPatient introuvable"));
     }
 
     @Override

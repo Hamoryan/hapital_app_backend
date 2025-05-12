@@ -10,7 +10,6 @@ import AppProject.hopital.repository.PersonnelRepository;
 import AppProject.hopital.service.FactureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,18 +27,18 @@ public class FactureServiceImpl implements FactureService {
         Facture facture = factureMapper.DtoToEntity(dto);
         facture.setStatutFacture(StatutFacture.NON_PAYEE);
         facture.setPatient(patientRepository.findById(dto.getPatientId()).orElseThrow( ()
-                -> new RuntimeException("Patient not found")));
+                -> new RuntimeException("Patient introuvable")));
         facture.setPersonnel(personnelRepository.findById(dto.getPersonnelId()).orElseThrow(()
-                -> new RuntimeException("Personnel not found")));
+                -> new RuntimeException("Personnel introuvable")));
         return factureMapper.entityToDto(factureRepository.save(facture));
     }
 
     @Override
     public FactureDto effectuerPaiment(Long idFacture) {
         Facture facture = factureRepository.findById(idFacture).orElseThrow(()
-                ->new RuntimeException("bill not found"));
+                ->new RuntimeException("facture introuvable"));
         if (facture.getStatutFacture() == StatutFacture.PAYEE){
-            throw new RuntimeException("bill is already paid");
+            throw new RuntimeException("la facture a déja été payée");
         }
         facture.setStatutFacture(StatutFacture.PAYEE);
         return factureMapper.entityToDto(factureRepository.save(facture));

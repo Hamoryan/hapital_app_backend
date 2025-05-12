@@ -4,12 +4,14 @@ import AppProject.hopital.controller.api.ServicesApi;
 import AppProject.hopital.dto.ServicesDto;
 import AppProject.hopital.service.ServicesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ServicesController implements ServicesApi {
 
     private final ServicesService servicesService;

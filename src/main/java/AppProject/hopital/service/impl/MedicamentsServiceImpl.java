@@ -8,7 +8,6 @@ import AppProject.hopital.service.MedicamentsService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public class MedicamentsServiceImpl implements MedicamentsService {
             return dto;
         }
         else {
-            throw new EntityNotFoundException("Medicament not found");
+            throw new EntityNotFoundException("Medicament introuvable");
         }
     }
 
@@ -40,7 +39,7 @@ public class MedicamentsServiceImpl implements MedicamentsService {
     public MedicamentsDto getMedicamentById(Long id) {
         return medicamentsRepository.findById(id)
                 .map(medicamentsMapper::entityToDto)
-                .orElseThrow(() -> new RuntimeException("Medicament Not found"));
+                .orElseThrow(() -> new RuntimeException("Medicament introuvable"));
     }
 
     @Override
@@ -60,7 +59,7 @@ public class MedicamentsServiceImpl implements MedicamentsService {
     @Override
     public MedicamentsDto augmenterStock(Long id, int quantite) {
         Medicaments medicaments = medicamentsRepository.findById(id)
-                .orElseThrow(() ->new RuntimeException("Medicament not found"));
+                .orElseThrow(() ->new RuntimeException("Medicament introuvable"));
         medicaments.setQuantiteStock(medicaments.getQuantiteStock() + quantite);
         return medicamentsMapper.entityToDto(medicamentsRepository.save(medicaments));
     }
@@ -68,7 +67,7 @@ public class MedicamentsServiceImpl implements MedicamentsService {
     @Override
     public MedicamentsDto diminuerStock(Long id, int quantite) {
         Medicaments medicaments = medicamentsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Medicament not found"));
+                .orElseThrow(() -> new RuntimeException("Medicament introuvable"));
         int nouveauStock = medicaments.getQuantiteStock() - quantite;
         if (nouveauStock <1){
             throw new RuntimeException("Stock insuffisant pour diminuer");

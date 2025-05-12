@@ -1,5 +1,6 @@
 package AppProject.hopital.service.impl;
 
+import AppProject.hopital.dto.ChangePasswordDto;
 import AppProject.hopital.dto.PersonnelDto;
 import AppProject.hopital.entity.Personnel;
 import AppProject.hopital.mapper.PersonnelMapper;
@@ -37,6 +38,10 @@ public class PersonnelServiceImpl implements PersonnelService {
 
     @Override
     public PersonnelDto createdPersonnel(Personnel personnel) {
+
+        if(personnelRepository.existsByPersonnelname(personnel.getPersonnelname())){
+            throw new IllegalArgumentException("Le nom du personnel est deja utilisé.");
+        }
         personnel.setPasseword(passwordEncoder.encode(personnel.getPasseword()));
         Personnel personnelCreated = personnelRepository.save(personnel);
         return personnelMapper.entityToDto(personnelCreated);
@@ -50,7 +55,7 @@ public class PersonnelServiceImpl implements PersonnelService {
             personnelDto =  personnelMapper.entityToDto(optionalPersonnel.get());
             return personnelDto;
         } else {
-            throw new  EntityNotFoundException("Personnel Not found");
+            throw new  EntityNotFoundException("Personnel Non trouvé");
         }
     }
     @Override
@@ -61,14 +66,14 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         }
         else {
-            throw new EntityNotFoundException("Personnel doesn't exist");
+            throw new EntityNotFoundException("Cet Utilisateur n'existe pas");
         }
 
     }
     @Override
      public void changeStatutPersonnel(Long id){
         Personnel personnel = personnelRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Personnel doesn't exist")
+                () -> new EntityNotFoundException("Cet Utilisateur n'existe pas")
         );
 
         if (personnel.getStatut().equals(true)) {
@@ -78,6 +83,22 @@ public class PersonnelServiceImpl implements PersonnelService {
         }
         personnelRepository.save(personnel);
 
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDto dto) {
+        Personnel personnel =personnelRepository.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (!passwordEncoder.matches(dto.getOldPassword(), personnel.getPasseword())){
+            throw new IllegalArgumentException("Ancien mot de passe incorrect");
+        }
+
+        if (passwordEncoder.matches(dto.getNewPassword(), personnel.getPasseword())){
+            throw new IllegalArgumentException("Le nouveau mot de passe ne dois pas etre identique á l'ancien");
+        }
+        personnel.setPasseword(passwordEncoder.encode(dto.getNewPassword()));
+        personnelRepository.save(personnel);
     }
 
 

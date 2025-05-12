@@ -11,7 +11,6 @@ public class PersonnelDto {
     private Boolean statut;
     private String telephone;
     private String email;
-    private Long idFacture;
 
 
 }

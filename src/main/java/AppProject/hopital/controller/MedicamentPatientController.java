@@ -4,12 +4,14 @@ import AppProject.hopital.controller.api.MedicamentPatientApi;
 import AppProject.hopital.dto.MedicamentPatientDto;
 import AppProject.hopital.service.MedicamentPatientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class MedicamentPatientController implements MedicamentPatientApi {
 
     private final MedicamentPatientService medicamentPatientService;
